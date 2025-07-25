@@ -5,16 +5,16 @@
 This project is an automation test suite for a custom video player using Playwright and Docker.
 
 ## Project Structure
-├── client/              	 # Static frontend with video player
-├── server/              	 # Express.js backend to receive events
-├── tests/               	 # Playwright tests
-├── utils/               	 # Reusable test helpers
-├── Dockerfile           	 # Builds and runs backend server
-├── docker-compose.yml   	 # Launches frontend/backend
-├── playwright.config.ts 	 # Playwright test runner config
-├── .github/workflows/ci.yml # CI pipeline
-├── README.md            	 # This file
-└── docs/test-plan.md    	 # Test strategy & coverage
+client/              	 # Static frontend with video player
+server/              	 # Express.js backend to receive events
+tests/               	 # Playwright tests
+utils/               	 # Reusable test helpers
+Dockerfile           	 # Builds and runs backend server
+docker-compose.yml   	 # Launches frontend/backend
+playwright.config.ts 	 # Playwright test runner config
+.github/workflows/ci.yml # CI pipeline
+README.md            	 # This file
+docs/test-plan.md    	 # Test strategy & coverage
 
 ## Running Locally
 	* Install dependencies: `npm install`
@@ -25,7 +25,7 @@ This project is an automation test suite for a custom video player using Playwri
 ## Running Tests in CI
 	* Tests run automatically on push using GitHub Actions.
 	* Results are stored as:
-		* playwright-report/ (HTML)
+	  - playwright-report/ (HTML)
 		
 ## Test Coverage
 	* Video playback (play, pause, seek, scroll)
@@ -35,10 +35,10 @@ This project is an automation test suite for a custom video player using Playwri
 
 ## CI/CD
 	* GitHub Actions pipeline:
-	  * Builds app
-	  * Starts backend
-	  * Runs tests
-	  * Exports results in HTML
+	  - Builds app
+	  - Starts backend
+	  - Runs tests
+	  - Exports results in HTML
 	  
 ## Tech Stack
 	* Playwright
