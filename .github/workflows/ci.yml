@@ -26,7 +26,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Start backend via Docker Compose
-        run: docker-compose up -d
+        run: docker compose up -d
       - name: Wait until server is ready
         run: npx wait-on http://localhost:3000
 
