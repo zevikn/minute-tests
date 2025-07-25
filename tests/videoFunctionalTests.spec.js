@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { verifyEvent } from './utils/verifyEvent';
+import { verifyRequest, verifyResponse } from './utils/verifyEvent';
 import { videoPlay, videoPause, videoSeek, videoScroll } from './utils/videoUtils';
 
-test.describe('MyPlayer Web Client Tests', () => {
-    let consoleErrors = [];
+test.describe('MyPlayer Web Client Functional Tests', () => {
     const videoSelector = 'video';
+    let consoleErrors = [];
 
     test.beforeEach(async ({ page }) => {
         consoleErrors = [];
@@ -32,7 +32,7 @@ test.describe('MyPlayer Web Client Tests', () => {
             ),
             await videoPlay(page, videoSelector) //trigger play
         ]);
-        await verifyEvent(playEvent, 'play', 0, 'user-123');
+        await verifyRequest(playEvent, 'play', 0, 'user-123');
     });
 
     test('Pause video and verify event', async ({ page }) => {
@@ -45,7 +45,7 @@ test.describe('MyPlayer Web Client Tests', () => {
             ),
             await videoPause(page, videoSelector) //trigger pause
         ]);
-        await verifyEvent(pauseEvent, 'pause', 0, 'user-123');
+        await verifyRequest(pauseEvent, 'pause', 0, 'user-123');
     });
 
     test('Seek video and verify event', async ({ page }) => {
@@ -58,7 +58,7 @@ test.describe('MyPlayer Web Client Tests', () => {
             ),
             await videoSeek(page, videoSelector) //trigger seek
         ]);
-        await verifyEvent(seekEvent, 'seeked', 5, 'user-123');
+        await verifyRequest(seekEvent, 'seeked', 5, 'user-123');
     });
 
     test('Scroll the page and verify event', async ({ page }) => {
@@ -71,42 +71,7 @@ test.describe('MyPlayer Web Client Tests', () => {
             ),
             await videoScroll(page) //trigger scroll
         ]);
-        await verifyEvent(scrollEvent, 'scroll', 0, 'user-123');
+        await verifyRequest(scrollEvent, 'scroll', 0, 'user-123');
     });
-
-    test('Reject invalid event type', async ({ request }) => {
-        const response = await request.post('http://localhost:3000/api/event', {
-            data: {
-                userId: 'user-123',
-                type: 'playyy', // Invalid type
-                videoTime: 5,
-                timestamp: new Date().toISOString()
-            }
-        });
-
-        // Expect it to return 400 or similar error
-        expect(response.status()).toBe(400);
-        const body = await response.json();
-        expect(body.ok).not.toBe(true);
-        console.log('response:', body);
-    });
-
-    test('Reject missing userId', async ({ request }) => {
-        const response = await request.post('http://localhost:3000/api/event', {
-            data: {
-                // userId is intentionally missing
-                type: 'pause', // Invalid type
-                videoTime: 2.5,
-                timestamp: new Date().toISOString()
-            }
-        });
-
-        // Expect it to return 400 or similar error
-        expect(response.status()).toBe(400);
-        const body = await response.json();
-        expect(body.ok).not.toBe(true);
-        console.log('response:', body);
-    });
-
 
 });

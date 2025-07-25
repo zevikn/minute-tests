@@ -1,17 +1,24 @@
 import { expect } from '@playwright/test';
 
-export async function verifyEvent(event, type, videoTime, userId) {
-    let eventPostData;
+export async function verifyRequest(request, type, videoTime, userId) {
+    let requestPostData;
 
     try {
-        eventPostData = JSON.parse(event.postData());
+        requestPostData = JSON.parse(request.postData());
     } catch (err) {
-        throw new Error('Failed to parse event POST data: ' + err.message);
+        throw new Error('Failed to parse request POST data: ' + err.message);
     }
 
-    console.log('📤 EventPostData:', eventPostData);
-    expect(eventPostData.type).toBe(type);
-    expect(eventPostData.videoTime).toBeGreaterThanOrEqual(videoTime);
-    expect(eventPostData.userId).toBe(userId);
-    expect(eventPostData.timestamp).toBeDefined();
+    console.log('📤 requestPostData:', requestPostData);
+    expect(requestPostData.type).toBe(type);
+    expect(requestPostData.videoTime).toBeGreaterThanOrEqual(videoTime);
+    expect(requestPostData.userId).toBe(userId);
+    expect(requestPostData.timestamp).toBeDefined();
+}
+
+export async function verifyResponse(response, statusCode, okStatus) {
+    const responseBody = await response.json();
+    console.log('responseBody:', responseBody);
+    expect(response.status()).toBe(statusCode);
+    expect(responseBody.ok).toBe(okStatus);
 }
