@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { verifyEvent } from './utils/verifyEvent';
+import { videoPlay, videoPause, videoSeek, videoScroll } from './utils/videoUtils';
 
 test.describe('MyPlayer Web Client Tests', () => {
-    const baseURL = 'http://localhost:3000';
     let consoleErrors = [];
+    const videoSelector = 'video';
 
     test.beforeEach(async ({ page }) => {
         consoleErrors = [];
@@ -11,8 +13,10 @@ test.describe('MyPlayer Web Client Tests', () => {
                 consoleErrors.push(msg.text());
             }
         });
-        await page.goto(baseURL);
-        await page.waitForSelector('video');
+        await page.goto('/');
+        await page.waitForSelector(videoSelector);
+        const isReady = await page.$eval(videoSelector, video => video.readyState >= 3);
+        expect(isReady).toBe(true);
     });
 
     test.afterEach(async ({ page }) => {
@@ -26,93 +30,47 @@ test.describe('MyPlayer Web Client Tests', () => {
                 req.method() === 'POST' &&
                 req.postData()?.includes('"type":"play"')
             ),
-            await page.evaluate(() => {
-                const video = document.getElementById('video');
-                video.play();
-            }),
-            await page.waitForTimeout(500)
+            await videoPlay(page, videoSelector) //trigger play
         ]);
-
-        const event = JSON.parse(playEvent.postData());
-        console.log('📤 event:', event);
-        expect(event.type).toBe('play');
-        expect(event.videoTime).toBeGreaterThanOrEqual(0);
-        expect(event.userId).toBe('user-123');
-        expect(event.timestamp).toBeDefined();
+        await verifyEvent(playEvent, 'play', 0, 'user-123');
     });
 
     test('Pause video and verify event', async ({ page }) => {
-        await page.evaluate(() => {
-            const video = document.getElementById('video');
-            video.play();
-        });
-        await page.waitForTimeout(500);
+        await videoPlay(page, videoSelector);
         const [pauseEvent] = await Promise.all([
             page.waitForRequest(req =>
                 req.url().includes('/api/event') &&
                 req.method() === 'POST' &&
                 req.postData()?.includes('"type":"pause"')
             ),
-            await page.evaluate(() => {
-                const video = document.getElementById('video');
-                video.pause();
-            })
+            await videoPause(page, videoSelector) //trigger pause
         ]);
-
-        const event = JSON.parse(pauseEvent.postData());
-        console.log('📤 event:', event);
-        expect(event.type).toBe('pause');
-        expect(event.videoTime).toBeGreaterThanOrEqual(0);
-        expect(event.userId).toBe('user-123');
-        expect(event.timestamp).toBeDefined();
+        await verifyEvent(pauseEvent, 'pause', 0, 'user-123');
     });
 
     test('Seek video and verify event', async ({ page }) => {
-        await page.evaluate(() => {
-            const video = document.getElementById('video');
-            video.play();
-        });
-        await page.waitForTimeout(500);
+        await videoPlay(page, videoSelector);
         const [seekEvent] = await Promise.all([
             page.waitForRequest(req =>
                 req.url().includes('/api/event') &&
                 req.method() === 'POST' &&
                 req.postData()?.includes('"type":"seeked"')
             ),
-            await page.evaluate(() => {
-                const video = document.getElementById('video');
-                video.currentTime = 5;
-            })
+            await videoSeek(page, videoSelector) //trigger seek
         ]);
-
-        const event = JSON.parse(seekEvent.postData());
-        console.log('📤 event:', event);
-        expect(event.type).toBe('seeked');
-        expect(event.videoTime).toBeCloseTo(5);
-        expect(event.userId).toBe('user-123');
-        expect(event.timestamp).toBeDefined();
+        await verifyEvent(seekEvent, 'seeked', 5, 'user-123');
     });
 
     test('Scroll the page and verify event', async ({ page }) => {
-        await page.evaluate(() => {
-            const video = document.getElementById('video');
-            video.play();
-        });
-        await page.waitForTimeout(500);
+        await videoPlay(page, videoSelector);
         const [scrollEvent] = await Promise.all([
             page.waitForRequest(req =>
                 req.url().includes('/api/event') &&
                 req.method() === 'POST' &&
                 req.postData()?.includes('"type":"scroll"')
             ),
-            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+            await videoScroll(page) //trigger scroll
         ]);
-
-        const event = JSON.parse(scrollEvent.postData());
-        console.log('📤 event:', event);
-        expect(event.type).toBe('scroll');
-        expect(event.videoTime).toBeGreaterThanOrEqual(0);
-        expect(event.userId).toBe('user-123');
-        expect(event.timestamp).toBeDefined();
+        await verifyEvent(scrollEvent, 'scroll', 0, 'user-123');
     });
 });
