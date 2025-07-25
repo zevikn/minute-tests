@@ -1,44 +1,22 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('MyPlayer Video Controls', () => {
+test.describe('MyPlayer Web Client Tests', () => {
     const baseURL = 'http://localhost:3000';
+    let consoleErrors = [];
 
     test.beforeEach(async ({ page }) => {
+        consoleErrors = [];
+        page.on('console', msg => {
+            if (msg.type() === 'error') {
+                consoleErrors.push(msg.text());
+            }
+        });
         await page.goto(baseURL);
         await page.waitForSelector('video');
+    });
 
-        // await page.evaluate(() => {
-        //     const video = document.getElementById('video');
-        //     video.muted = true;
-        //     video.play();
-        // });
-        // await page.waitForTimeout(500);
-
-        // const readyState = await page.evaluate(() => {
-        //     return document.getElementById('video').readyState;
-        // });
-        //console.log('Video readyState:', readyState); // Should be >= 3 for playback
-
-        // const error = await page.evaluate(() => {
-        //     const err = document.getElementById('video').error;
-        //     return err ? err.message || err.code : null;
-        // });
-        // console.log('Video error:', error);
-
-        //page.on('console', msg => console.log(msg.text()));
-
-        // page.on('request', req => {
-        //     if (req.url().includes('/api/event')) {
-        //         console.log('📤 *** Zeev Request:', req.method(), req.postData());
-        //     }
-        // });
-
-        // page.on('response', async resp => {
-        //     if (resp.url().includes('/api/event')) {
-        //         const body = await resp.json();
-        //         console.log('📥 *** Zeev Response:', body);
-        //     }
-        // });
+    test.afterEach(async ({ page }) => {
+        expect(consoleErrors, 'Console errors found').toEqual([]);
     });
 
     test('Play video and verify event', async ({ page }) => {
