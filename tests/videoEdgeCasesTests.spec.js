@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { verifyRequest, verifyResponse } from './utils/verifyEvent';
 import { videoPlay, videoPause, videoSeek, videoScroll } from './utils/videoUtils';
 
-test.describe('MyPlayer Web Client Edge Cases Tests', () => {
+test.describe('MyPlayer Web Client - Edge Cases Tests', () => {
     const videoSelector = 'video';
     let consoleErrors = [];
 
@@ -23,24 +23,24 @@ test.describe('MyPlayer Web Client Edge Cases Tests', () => {
         expect(consoleErrors, 'Console errors found').toEqual([]);
     });
 
-    test('Reject invalid event type', async ({ request }) => {
-        const response = await request.post( '/api/event', {
+    test('TC_EDGE_06 - Verify error 400 for missing userId', async ({ request }) => {
+        const response = await request.post('/api/event', {
             data: {
-                userId: 'user-123',
-                type: 'playyy', // Invalid type
-                videoTime: 5,
+                // userId is intentionally missing
+                type: 'pause', // Invalid type
+                videoTime: 2.5,
                 timestamp: new Date().toISOString()
             }
         });
         await verifyResponse(response,400,false);
     });
 
-    test('Reject missing userId', async ({ request }) => {
-        const response = await request.post('/api/event', {
+    test('TC_EDGE_07 - Verify error 400 for invalid event type', async ({ request }) => {
+        const response = await request.post( '/api/event', {
             data: {
-                // userId is intentionally missing
-                type: 'pause', // Invalid type
-                videoTime: 2.5,
+                userId: 'user-123',
+                type: 'playyy', // Invalid type
+                videoTime: 5,
                 timestamp: new Date().toISOString()
             }
         });

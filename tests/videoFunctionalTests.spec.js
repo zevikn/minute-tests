@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { verifyRequest, verifyResponse } from './utils/verifyEvent';
 import { videoPlay, videoPause, videoSeek, videoScroll } from './utils/videoUtils';
 
-test.describe('MyPlayer Web Client Functional Tests', () => {
+test.describe('MyPlayer Web Client - Functional Tests', () => {
     const videoSelector = 'video';
     let consoleErrors = [];
 
@@ -23,7 +23,7 @@ test.describe('MyPlayer Web Client Functional Tests', () => {
         expect(consoleErrors, 'Console errors found').toEqual([]);
     });
 
-    test('Play video and verify event', async ({ page }) => {
+    test('TC_UI_01 - Play video and verify `play` event', async ({ page }) => {
         const [playEvent] = await Promise.all([
             page.waitForRequest(req =>
                 req.url().includes('/api/event') &&
@@ -35,7 +35,7 @@ test.describe('MyPlayer Web Client Functional Tests', () => {
         await verifyRequest(playEvent, 'play', 0, 'user-123');
     });
 
-    test('Pause video and verify event', async ({ page }) => {
+    test('TC_UI_02 - Pause video and verify `pause` event', async ({ page }) => {
         await videoPlay(page, videoSelector);
         const [pauseEvent] = await Promise.all([
             page.waitForRequest(req =>
@@ -48,7 +48,7 @@ test.describe('MyPlayer Web Client Functional Tests', () => {
         await verifyRequest(pauseEvent, 'pause', 0, 'user-123');
     });
 
-    test('Seek video and verify event', async ({ page }) => {
+    test('TC_UI_03 - Seek video to 5s and verify `seek` event', async ({ page }) => {
         await videoPlay(page, videoSelector);
         const [seekEvent] = await Promise.all([
             page.waitForRequest(req =>
@@ -56,12 +56,25 @@ test.describe('MyPlayer Web Client Functional Tests', () => {
                 req.method() === 'POST' &&
                 req.postData()?.includes('"type":"seeked"')
             ),
-            await videoSeek(page, videoSelector) //trigger seek
+            await videoSeek(page, videoSelector, 5) //trigger seek
         ]);
         await verifyRequest(seekEvent, 'seeked', 5, 'user-123');
     });
 
-    test('Scroll the page and verify event', async ({ page }) => {
+    test('TC_UI_04 - Seek video to 7.123s and verify `seek` event', async ({ page }) => {
+        await videoPlay(page, videoSelector);
+        const [seekEvent] = await Promise.all([
+            page.waitForRequest(req =>
+                req.url().includes('/api/event') &&
+                req.method() === 'POST' &&
+                req.postData()?.includes('"type":"seeked"')
+            ),
+            await videoSeek(page, videoSelector, 7.123) //trigger seek
+        ]);
+        await verifyRequest(seekEvent, 'seeked', 7.123, 'user-123');
+    });
+
+    test('TC_UI_05 - Scroll the page and verify `scroll` event', async ({ page }) => {
         await videoPlay(page, videoSelector);
         const [scrollEvent] = await Promise.all([
             page.waitForRequest(req =>

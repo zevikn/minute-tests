@@ -14,11 +14,18 @@ export async function videoPause(page, videoSelector) {
     }, videoSelector);
 }
 
-export async function videoSeek(page, videoSelector) {
-    await page.evaluate((selector) => {
+export async function videoSeek(page, videoSelector, seekTime) {
+    await page.evaluate(({ selector, time }) => {
         const video = document.getElementById(selector);
-        video.currentTime = 5;
-    }, videoSelector);
+        const videoDuration = video.duration;
+        if (video) {
+            if (time === 'end') { //TODO: -999
+                video.currentTime = videoDuration;
+            } else {
+                video.currentTime = time;
+            }
+        }
+    }, { selector: videoSelector, time: seekTime });
 }
 
 export async function videoScroll(page) {
