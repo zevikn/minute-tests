@@ -73,4 +73,23 @@ test.describe('MyPlayer Web Client Tests', () => {
         ]);
         await verifyEvent(scrollEvent, 'scroll', 0, 'user-123');
     });
+
+    test('Reject invalid event type', async ({ request }) => {
+        const response = await request.post('http://localhost:3000/api/event', {
+            data: {
+                userId: 'user-123',
+                type: 'playyy', // Invalid type
+                videoTime: 5,
+                timestamp: new Date().toISOString()
+            }
+        });
+
+        // Expect it to return 400 or similar error
+        expect(response.status()).toBe(400);
+        const body = await response.json();
+        console.log('response:', body);
+        expect(body.ok).not.toBe(true);
+    });
+
+
 });
