@@ -1,5 +1,7 @@
 [![CI](https://github.com/zevikn/minute-tests/actions/workflows/ci.yml/badge.svg)](https://github.com/zevikn/minute-tests/actions/workflows/ci.yml)
 
+GitHub Dashboard - https://zevikn.github.io/minute-tests/
+
 # Minute Media Video Player Test Suite
 
 This project is an automation test suite for a custom video player using Playwright and Docker.
