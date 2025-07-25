@@ -5,19 +5,19 @@
 This project is an automation test suite for a custom video player using Playwright and Docker.
 
 ## Project Structure
-├── client/ 				Static frontend with video player  
-├── server/ 				Express.js backend to receive events  
-├── tests/ 					Playwright tests  
-├── utils/ 					Reusable test helpers  
-├── Dockerfile 				Builds and runs backend server  
-├── docker-compose.yml 		Launches frontend/backend  
-├── playwright.config.ts 	Playwright test runner config  
+├── client/    Static frontend with video player  
+├── server/    Express.js backend to receive events  
+├── tests/    Playwright tests  
+├── utils/    Reusable test helpers  
+├── Dockerfile    Builds and runs backend server  
+├── docker-compose.yml    Launches frontend/backend  
+├── playwright.config.ts    Playwright test runner config  
 ├── .github/  
 │ └── workflows/  
-│ └── ci.yml 				CI pipeline  
-├── README.md 				This file  
+│ └── ci.yml    CI pipeline  
+├── README.md    This file  
 └── docs/  
-└── test-plan.md 			Test strategy & coverage   
+└── test-plan.md    Test strategy & coverage   
 
 ## Running Locally
 	* Install dependencies: `npm install`
