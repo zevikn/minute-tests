@@ -87,8 +87,25 @@ test.describe('MyPlayer Web Client Tests', () => {
         // Expect it to return 400 or similar error
         expect(response.status()).toBe(400);
         const body = await response.json();
-        console.log('response:', body);
         expect(body.ok).not.toBe(true);
+        console.log('response:', body);
+    });
+
+    test('Reject missing userId', async ({ request }) => {
+        const response = await request.post('http://localhost:3000/api/event', {
+            data: {
+                // userId is intentionally missing
+                type: 'pause', // Invalid type
+                videoTime: 2.5,
+                timestamp: new Date().toISOString()
+            }
+        });
+
+        // Expect it to return 400 or similar error
+        expect(response.status()).toBe(400);
+        const body = await response.json();
+        expect(body.ok).not.toBe(true);
+        console.log('response:', body);
     });
 
 
