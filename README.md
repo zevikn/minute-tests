@@ -63,6 +63,8 @@ This project is an automation test suite for a custom video player using Playwri
 	* See docs/test-plan.md for test coverage and strategy.
 
 ## Issues/Bugs Found:
+| Issue | Description | Problem | Fix |
+|-------|-------------|---------|-----|
 | favicon.ico file | file is missing | caused 404 error on console | fixed in client's index.html file |
 | client sends wrong event | ('play' instead of 'pause') in 'pause' event | causing functional tests failures | fix is in comment in client's index.html file |
 | server validations | server is missing validations for missing/invalid fields | causing edge cases tests failure | fix is in comment in client index.html |
