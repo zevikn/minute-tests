@@ -14,12 +14,19 @@ export async function videoPause(page, videoSelector) {
     }, videoSelector);
 }
 
+export async function videoMute(page, videoSelector) {
+    await page.evaluate((selector) => {
+        const video = document.getElementById(selector);
+        video.muted = true;
+    }, videoSelector);
+}
+
 export async function videoSeek(page, videoSelector, seekTime) {
     await page.evaluate(({ selector, time }) => {
         const video = document.getElementById(selector);
         const videoDuration = video.duration;
         if (video) {
-            if (time === 'end') { //TODO: -999
+            if (time === 'max') {
                 video.currentTime = videoDuration;
             } else {
                 video.currentTime = time;

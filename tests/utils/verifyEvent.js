@@ -11,6 +11,8 @@ export async function verifyRequest(request, type, videoTime, userId) {
     expect(requestPostData.videoTime).toBeGreaterThanOrEqual(videoTime);
     expect(requestPostData.userId).toBe(userId);
     expect(requestPostData.timestamp).toBeDefined();
+    const parsed = Date.parse(requestPostData.timestamp);
+    expect(Number.isNaN(parsed)).toBe(false);
     //console.log('📤 requestPostData:', requestPostData); //use for debug only
 }
 

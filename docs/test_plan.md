@@ -14,8 +14,16 @@ To verify the functionality, reliability, and backend integration of the MyPlaye
 | TC_UI_03 | Seek to 5 seconds | Automated | Video jumps to 5s, `seeked` event is sent |
 | TC_UI_04 | Seek to 7.123 seconds | Automated | Video jumps to 7.123s, `seeked` event is sent |
 | TC_UI_05 | Scroll page | Automated | User scrolls down, `scroll` event is sent |
-| TC_UI_06 | Video loads without buffering | Manual | Video plays instantly on fast connection |
-| TC_UI_07 | Check Other Controlls | Manual | Sound on/off, Full screen, Download, Speed, PiP all works fine |
+| TC_UI_06 | Double-click play rapidly | Automated | only one `play` event is sent |
+| TC_UI_07 | Double-click pause rapidly | Automated | only one `pause` event is sent |
+| TC_UI_08 | Video loads without buffering | Manual | Video plays instantly on fast connection |
+| TC_UI_09 | Check Other Controlls | Manual | Sound on/off, Full screen, Download, Speed, PiP all works fine |
+| TC_UI_10 | Verify player works on resize window | Manual | Resize browser window and verify that player still works fine |
+| TC_UI_11 | Check video controls hidden when disabled | Manual | Controls are hidden if `show all controls` is unchecked  |
+| TC_UI_12 | Check right-click options on video | Manual | Validate that all right-click options works fine  |
+| TC_UI_13 | Network Throttling Test | Manual | Video buffers or stalls appropriately under slow connection   |
+| TC_UI_14 | Concurrent Video Sessions  | Manual | Two tabs/players send separate events correctly    |
+| TC_UI_15 | Reload page while video playing  | Manual | Video restarts from beginning, no stale events sent    |
 
 ---
 
@@ -25,12 +33,14 @@ To verify the functionality, reliability, and backend integration of the MyPlaye
 |--------------|-------------|------|-----------------|
 | TC_EDGE_01 | Seek to video end | Automated | `seeked` event is sent with max videoTime |
 | TC_EDGE_02 | Seek video to negative time | Automated | `seeked` event is sent with 0 videoTime |
-| TC_EDGE_03 | Double-click pause rapidly | Automated | Only one `pause` event is sent |
-| TC_EDGE_04 | Scroll without playing video | Automated | `scroll` event sent with videoTime 0 |
-| TC_EDGE_05 | Scroll after playing video | Automated | `scroll` event sent with max videoTime |
-| TC_EDGE_06 | Missing `userId` in request | Automated | Backend responds with 4xx error |
-| TC_EDGE_07 | Invalid event type sent (e.g., `playyy`) | Automated | Backend rejects request |
-| TC_EDGE_08 | Malformed backend response (simulate error 500) | Manual | No crash; error handled gracefully |
+| TC_EDGE_03 | Scroll without playing video | Automated | `scroll` event sent with videoTime 0 |
+| TC_EDGE_04 | Scroll after video has finished to play | Automated | `scroll` event sent with max videoTime |
+| TC_EDGE_05 | Missing `userId` in request | Automated | Backend responds with 4xx error |
+| TC_EDGE_06 | Empty `userId` in request | Automated | Backend responds with 4xx error |
+| TC_EDGE_07 | Empty event type sent | Automated | Backend responds with 4xx error |
+| TC_EDGE_08 | Invalid event type sent (e.g., `playyy`) | Automated | Backend rejects request |
+| TC_EDGE_09 | Invalid videoTime sent (e.g., `abc`) | Automated | Backend rejects request |
+| TC_EDGE_10 | Malformed backend response (simulate error 500) | Manual | No crash; error handled gracefully |
 
 ---
 
