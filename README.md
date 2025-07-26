@@ -76,5 +76,3 @@ This project is an automation test suite for a custom video player using Playwri
 | favicon.ico | file is missing | causing 404 error on console | fixed in client's index.html file |
 | client sends wrong event | ('play' instead of 'pause') in 'pause' event | causing some functional tests failures | fix is COMMENTED in client's index.html file |
 | server validations | server is missing validations for missing/invalid fields | causing some edge cases tests failure | fix is COMMENTED in server.js file |
-| additional seek event when playing again | after movie has finished, clikcing play again sends play & seek event | additional seek event is sent | no fix for now |
-
