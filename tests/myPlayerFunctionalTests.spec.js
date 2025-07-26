@@ -101,7 +101,7 @@ test.describe('MyPlayer Web Client - Functional Tests', () => {
         });
         await videoPlay(page, videoSelector); //trigger play
         await videoSeek(page, videoSelector, (videoDuration-0.5)); //seek to almost video's end
-        await page.waitForTimeout(1000);
+        await page.waitForTimeout(2000);
         await videoPlay(page, videoSelector); //trigger play again (start the movie again)
 
         expect(playEvents.length).toBe(2); //verify that 2 play events were sent
