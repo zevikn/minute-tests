@@ -33,7 +33,7 @@
     };
 
     video.addEventListener('play', () => sendEvent('play'));
-	video.addEventListener('pause', () => sendEvent('pause')); <!--need to fix the event sent to 'pause' (to pass all tests) -->
+	video.addEventListener('pause', () => sendEvent('play')); <!--need to fix the event sent to 'pause' (to pass all tests) -->
     video.addEventListener('seeked', () => sendEvent('seeked'));
 
     window.addEventListener('scroll', () => {
