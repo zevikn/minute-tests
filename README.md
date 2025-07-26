@@ -2,6 +2,8 @@
 
 GitHub Dashboard - https://zevikn.github.io/minute-tests/
 
+** Please notice the 'Open Issues(Bugs found)' section below
+
 # Minute Media Video Player Test Suite
 
 This project is an automation test suite for a custom video player using Playwright and Docker.
@@ -64,9 +66,15 @@ This project is an automation test suite for a custom video player using Playwri
 ## Test Plan	
 	* See docs/test-plan.md for test coverage and strategy.
 
-## Issues/Bugs Found:
+## Open Issues(Bugs Found) 
+
+#### Please notice that latest run is without client&server bugs fixes.
+#### GitHub Dashboard results show tests status after the bugs will be fixed.
+
 | Issue | Description | Problem | Fix |
 |-------|-------------|---------|-----|
-| favicon.ico file | file is missing | caused 404 error on console | fixed in client's index.html file |
-| client sends wrong event | ('play' instead of 'pause') in 'pause' event | causing functional tests failures | fix is in comment in client's index.html file |
-| server validations | server is missing validations for missing/invalid fields | causing edge cases tests failure | fix is in comment in client index.html |
+| favicon.ico | file is missing | causing 404 error on console | fixed in client's index.html file |
+| client sends wrong event | ('play' instead of 'pause') in 'pause' event | causing some functional tests failures | fix is COMMENTED in client's index.html file |
+| server validations | server is missing validations for missing/invalid fields | causing some edge cases tests failure | fix is COMMENTED in server.js file |
+| additional seek event when playing again | after movie has finished, clikcing play again sends play & seek event | additional seek event is sent | no fix for now |
+

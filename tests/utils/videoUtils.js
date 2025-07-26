@@ -24,13 +24,8 @@ export async function videoMute(page, videoSelector) {
 export async function videoSeek(page, videoSelector, seekTime) {
     await page.evaluate(({ selector, time }) => {
         const video = document.getElementById(selector);
-        const videoDuration = video.duration;
         if (video) {
-            if (time === 'max') {
-                video.currentTime = videoDuration;
-            } else {
-                video.currentTime = time;
-            }
+            video.currentTime = time;
         }
     }, { selector: videoSelector, time: seekTime });
 }

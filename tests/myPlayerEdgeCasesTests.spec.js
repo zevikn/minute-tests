@@ -24,6 +24,7 @@ test.describe('MyPlayer Web Client - Edge Cases Tests', () => {
     });
 
     test('TC_EDGE_01 - Seek video to its end and verify `seek` event is with max videoTime', async ({ page }) => {
+        const videoDuration = await page.$eval(videoSelector, video => video.duration);
         const [seekEvent] = await Promise.all([
             page.waitForRequest(req =>
                 req.url().includes('/api/event') &&
@@ -31,9 +32,8 @@ test.describe('MyPlayer Web Client - Edge Cases Tests', () => {
                 req.postData()?.includes('"type":"seeked"')
             ),
             await videoPlay(page, videoSelector),
-            await videoSeek(page, videoSelector, 'max') //trigger seek
+            await videoSeek(page, videoSelector, videoDuration) //trigger seek
         ]);
-        const videoDuration = await page.$eval(videoSelector, video => video.duration);
         await verifyRequest(seekEvent, 'seeked', videoDuration, 'user-123');
     });
 
@@ -63,6 +63,7 @@ test.describe('MyPlayer Web Client - Edge Cases Tests', () => {
     });
 
     test('TC_EDGE_04 - Scroll the page after the video has finished to play and verify `scroll` event is with max videoTime', async ({ page }) => {
+        const videoDuration = await page.$eval(videoSelector, video => video.duration);
         const [seekEvent] = await Promise.all([
             page.waitForRequest(req =>
                 req.url().includes('/api/event') &&
@@ -70,10 +71,9 @@ test.describe('MyPlayer Web Client - Edge Cases Tests', () => {
                 req.postData()?.includes('"type":"scroll"')
             ),
             await videoPlay(page, videoSelector),
-            await videoSeek(page, videoSelector, 'max'),
+            await videoSeek(page, videoSelector, videoDuration),
             await videoScroll(page) //trigger scroll
         ]);
-        const videoDuration = await page.$eval(videoSelector, video => video.duration);
         await verifyRequest(seekEvent, 'scroll', videoDuration, 'user-123');
     });
 
