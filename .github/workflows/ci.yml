@@ -47,8 +47,8 @@ jobs:
       - name: Extract summary
         id: summary
         run: |
-          PASSED=$(jq '[.suites[].specs[] | select(.tests[].results[].status == "passed")] | length' playwright-report/report.json)
-          FAILED=$(jq '[.suites[].specs[] | select(.tests[].results[].status == "failed")] | length' playwright-report/report.json)
+          PASSED=$(jq '[.suites[].specs[] | select(.tests[].results[].status == "passed")] | length' report.json)
+          FAILED=$(jq '[.suites[].specs[] | select(.tests[].results[].status == "failed")] | length' report.json)
           echo "PASSED=$PASSED" >> $GITHUB_OUTPUT
           echo "FAILED=$FAILED" >> $GITHUB_OUTPUT
           
