@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 
 permissions:
+  pull-requests: write
   contents: write
 
 jobs:
@@ -34,7 +35,7 @@ jobs:
         run: npx wait-on http://localhost:3000
 
       - name: Run Playwright tests
-        run: npx playwright test --reporter=html
+        run: npx playwright test --reporter=json,html
 
       - name: Upload HTML report
         if: always()
@@ -42,6 +43,25 @@ jobs:
         with:
           name: playwright-html-report
           path: playwright-report/
+
+      - name: Extract summary
+        id: summary
+        run: |
+          PASSED=$(jq '[.suites[].specs[] | select(.tests[].results[].status == "passed")] | length' playwright-report/.report.json)
+          FAILED=$(jq '[.suites[].specs[] | select(.tests[].results[].status == "failed")] | length' playwright-report/.report.json)
+          echo "PASSED=$PASSED" >> $GITHUB_OUTPUT
+          echo "FAILED=$FAILED" >> $GITHUB_OUTPUT
+          
+          - name: Post PR comment
+            uses: peter-evans/create-or-update-comment@v4
+            with:
+              token: ${{ secrets.GITHUB_TOKEN }}
+              issue-number: ${{ github.event.pull_request.number }}
+              body: |
+                ## Playwright Test Report
+                - Passed: **${{ steps.summary.outputs.PASSED }}**
+                - Failed: **${{ steps.summary.outputs.FAILED }}**
+                - [HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
       - name: Deploy report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
